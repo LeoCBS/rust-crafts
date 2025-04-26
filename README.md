@@ -1,2 +1,5 @@
 # rust-crafts
-Project with Rust libraries.
+Project with Rust libraries and study cases.
+
+ * [Tracing study and examples](tracing/README.md)
+
