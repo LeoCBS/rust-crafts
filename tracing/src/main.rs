@@ -1,6 +1,6 @@
 use std::{thread::sleep, time};
 
-use tracing::{Level, event, instrument, span};
+use tracing::{Level, Span, event, instrument, span};
 
 fn main() {
     // create a subsbcriber to get span and event information
@@ -16,6 +16,8 @@ fn main() {
     my_function(20);
     let mut my_type = MyType { name: "leo" };
     my_type.my_method(10);
+
+    parent_span(&my_span);
 }
 
 #[instrument]
@@ -23,6 +25,15 @@ pub fn my_function(my_arg: usize) {
     // This event will be recorded inside a span named `my_function` with the
     // field `my_arg`.
     event!(Level::INFO, "inside my_function!");
+}
+
+pub fn parent_span(parent: &Span) {
+    parent_span2(parent);
+}
+pub fn parent_span2(parent: &Span) {
+    let sp = span!(parent: parent, Level::WARN, "parent func");
+    let _enter_sp = sp.enter();
+    tracing::warn!("error to parse fast_message");
 }
 
 #[derive(Debug)]
